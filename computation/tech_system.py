@@ -1,6 +1,6 @@
 import random
 from typing import List
-from node import Node
+from .node import Node
 
 
 class TechSystem:
@@ -20,7 +20,7 @@ class TechSystem:
         for key, value in truth_table.items():
             if value:
                 probability += self.calculate_way_probability(self.str_to_list(key))
-        return probability
+        return round(float(probability), 6)
 
     def statistic_method(self, count: int):
         """Статистический метод"""
@@ -97,6 +97,27 @@ class TechSystem:
                 active_nodes.append(node.node_id)
 
         return active_nodes
+
+    def calculate_min_ways(self):
+        """Вычисляет минимальные пути в системе"""
+        truth_table = self.complete_truth_table()
+        working_ways = list(dict(filter(lambda x: x[1], truth_table.items())).keys())
+        min_ways = []
+        for way in working_ways:
+            if self.way_is_min(way):
+                min_ways.append(way)
+        return min_ways
+
+    def way_is_min(self, way: str):
+        """Проверяем является ли путь минимальным"""
+
+        result = True
+        active_nodes = self.str_to_list(way)
+        for node in active_nodes:
+            temp = list(filter(lambda x: x != node, active_nodes))
+            if self.check_way(temp):
+                result = False
+        return result
 
     @staticmethod
     def list_to_str(tmp: List[int]):
