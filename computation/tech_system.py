@@ -1,6 +1,6 @@
 import random
 from typing import List
-from .node import Node
+from node import Node
 
 
 class TechSystem:
