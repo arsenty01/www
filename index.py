@@ -29,11 +29,9 @@ class Start(QtWidgets.QMainWindow):
         self.ui.add_node.clicked.connect(self.add_node)  # fucking add node
         self.ui.clear.clicked.connect(self.clear)  # clear func
 
-
-
     def start_logic(self):
         """ """
-        nodes = self.get_converted_nodes()
+        nodes = self.nodes_list
         technical_system = TechSystem(nodes)
         self.ui.lineEdit.setText(f'{technical_system.logic_method()}')
 
@@ -48,7 +46,7 @@ class Start(QtWidgets.QMainWindow):
         """ """
         count = self.ui.tries_count_tf.text()
         if count:
-            nodes = self.get_converted_nodes()
+            nodes = self.nodes_list
             technical_system = TechSystem(nodes)
             self.ui.lineEdit_3.setText(f'{technical_system.statistic_method(int(count))}')
         else:
@@ -133,7 +131,11 @@ class Start(QtWidgets.QMainWindow):
 
     def clear(self):
         """ """
-        pass
+        ids_existing_nodes = []
+        for node in self.nodes_list:
+            ids_existing_nodes.append(node.node_id)
+        for n_id in ids_existing_nodes:
+            self.delete_node(n_id)
 
     def get_converted_nodes(self):
         """Конвертирует ui элементы в нужные элементы"""
