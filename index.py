@@ -4,11 +4,14 @@ from PyQt5.QtGui import QColor, QPen
 from computation.node import Node
 from crutch import DragButton
 from main_window import Ui_MainWindow
+from sub_window import Ui_Dialog
 from computation import *
 import sys
 
 
 class Start(QtWidgets.QMainWindow):
+
+    send_data = QtCore.pyqtSignal(dict)
 
     def __init__(self):
         super(Start, self).__init__()
@@ -25,6 +28,8 @@ class Start(QtWidgets.QMainWindow):
         self.ui.count_static.clicked.connect(self.start_static)  # static start count func
         self.ui.add_node.clicked.connect(self.add_node)  # fucking add node
         self.ui.clear.clicked.connect(self.clear)  # clear func
+
+
 
     def start_logic(self):
         """ """
@@ -61,6 +66,7 @@ class Start(QtWidgets.QMainWindow):
         self.ui.new_node.setGeometry(20, 20, 90, 40)
         self.ui.new_node.setObjectName(f'node{new_node_id}')
         self.ui.new_node.setText(f'Элемент{new_node_id}: 0.0')
+        self.ui.new_node.clicked.connect(lambda: self.call_modal(new_node_id))
         self.ui.new_node.show()
         self.ui.new_node.redraw.connect(self.temp)
         self.ui_buttons_list.append(self.ui.new_node)
@@ -70,6 +76,15 @@ class Start(QtWidgets.QMainWindow):
         node = Node(p, input, output, new_node_id, x, y)
         self.nodes_list.append(node)
         self.update()
+
+    def call_modal(self, node_id: int):
+        """ """
+
+        self.modal = Modal(dataset={
+            "nodes_list": self.nodes_list,
+            "node_id": node_id
+        })
+        self.modal.exec()
 
     def temp(self, new_data: dict):
         """ """
@@ -134,6 +149,27 @@ class Start(QtWidgets.QMainWindow):
                 temp_node.add_next_node(linked)
             result_node_list.append(temp_node)
         return result_node_list
+
+
+class Modal(QtWidgets.QDialog):
+
+    modal_closed = QtCore.pyqtSignal(dict)
+
+    def __init__(self, dataset: dict):
+        super(Modal, self).__init__()
+        self.something = ''
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
+        self.setWindowFlag(QtCore.Qt.WindowStaysOnTopHint)
+        self.dataset = dataset
+        self.fill_data(dataset)
+
+
+    def fill_data(self, dataset: dict):
+        """ """
+
+        for node in dataset.get('nodes_list'):
+            pass
 
 
 app = QtWidgets.QApplication([])
