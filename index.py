@@ -167,9 +167,13 @@ class Modal(QtWidgets.QDialog):
 
     def fill_data(self, dataset: dict):
         """ """
+        nodes_list = dataset.get('nodes_list')
 
-        for node in dataset.get('nodes_list'):
-            pass
+        for node in nodes_list:
+            if node.get('node_id') == node.get('node_id')
+                our_node = node
+
+        self.ui.p_le.setText(our_node.p)
 
 
 app = QtWidgets.QApplication([])
