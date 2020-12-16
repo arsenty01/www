@@ -12,9 +12,11 @@ class Start(QtWidgets.QMainWindow):
 
     def __init__(self):
         super(Start, self).__init__()
+        self.id_counter = 1
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.nodes_list = []
+        self.ui_buttons_list = []
 
         # buttons connectors
         self.ui.count_logic.clicked.connect(self.start_logic)  # logical start count func
@@ -32,7 +34,6 @@ class Start(QtWidgets.QMainWindow):
 
     def minimum_routes(self):
         """ """
-        pass
 
     def show_table(self):
         """ """
@@ -50,7 +51,8 @@ class Start(QtWidgets.QMainWindow):
 
     def add_node(self):
         """ """
-        new_node_id = len(self.nodes_list)+1
+        new_node_id = self.id_counter
+        self.id_counter += 1
         input = True
         output = True
         p = 0.0
@@ -61,6 +63,7 @@ class Start(QtWidgets.QMainWindow):
         self.ui.new_node.setText(f'Элемент{new_node_id}: 0.0')
         self.ui.new_node.show()
         self.ui.new_node.redraw.connect(self.temp)
+        self.ui_buttons_list.append(self.ui.new_node)
 
         x = self.ui.new_node.geometry().getRect()[0]
         y = self.ui.new_node.geometry().getRect()[1]
@@ -101,6 +104,17 @@ class Start(QtWidgets.QMainWindow):
     def create_node(self):
         """ """
         pass
+
+    def delete_node(self, node_id):
+        """ """
+
+        self.nodes_list = list(filter(lambda x: x.node_id != node_id, self.nodes_list))
+        for node in self.nodes_list:
+            node.next_nodes = list(filter(lambda x: x.node_id != node_id, node.next_nodes))
+        deleted_node = list(filter(lambda x: x.node_id == node_id, self.ui_buttons_list))[0]
+        deleted_node.hide()
+        self.ui_buttons_list = list(filter(lambda x: x.node_id != node_id, self.ui_buttons_list))
+        self.update()
 
     def clear(self):
         """ """
