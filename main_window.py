@@ -79,6 +79,12 @@ class Ui_MainWindow(object):
         self.nodes = QtWidgets.QWidget(self.centralwidget)
         self.nodes.setGeometry(QtCore.QRect(10, 10, 751, 611))
         self.nodes.setObjectName("nodes")
+        self.gridLayoutWidget = QtWidgets.QWidget(self.nodes)
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(-1, -1, 751, 611))
+        self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+        #self.gridLayout_2 = QtWidgets.QGridLayout(self.gridLayoutWidget)
+        #self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        #self.gridLayout_2.setObjectName("gridLayout_2")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 630, 751, 131))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
@@ -101,6 +107,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.liner = QtGui.QPainter()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

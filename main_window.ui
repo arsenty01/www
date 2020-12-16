@@ -173,6 +173,17 @@
       <height>611</height>
      </rect>
     </property>
+    <widget class="QWidget" name="gridLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>-1</x>
+       <y>-1</y>
+       <width>751</width>
+       <height>611</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2"/>
+    </widget>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
