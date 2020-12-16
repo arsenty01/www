@@ -1,3 +1,5 @@
+from typing import Any
+
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtGui import QColor, QPen
 
@@ -23,8 +25,6 @@ class Start(QtWidgets.QMainWindow):
 
         # buttons connectors
         self.ui.count_logic.clicked.connect(self.start_logic)  # logical start count func
-        self.ui.min_routes.clicked.connect(self.minimum_routes)  # minimum routes func
-        self.ui.true_table.clicked.connect(self.show_table)  # show true table func
         self.ui.count_static.clicked.connect(self.start_static)  # static start count func
         self.ui.add_node.clicked.connect(self.add_node)  # fucking add node
         self.ui.clear.clicked.connect(self.clear)  # clear func
@@ -82,7 +82,18 @@ class Start(QtWidgets.QMainWindow):
             "nodes_list": self.nodes_list,
             "node_id": node_id
         })
+        self.modal.modal_closed.connect(self.edit_node)
         self.modal.exec()
+
+    def edit_node(self, node):
+        """"""
+        self.nodes_list = list(filter(lambda x: x.node_id != node.node_id, self.nodes_list))
+        next_nodes = list(filter(lambda x: x.node_id in node.next_nodes, self.nodes_list))
+        node.next_nodes = next_nodes
+        self.nodes_list.append(node)
+        temp_node = list(filter(lambda x: x.node_id == node.node_id, self.ui_buttons_list))[0]
+        temp_node.setText(f'Элемент{node.node_id}: {node.p}')
+        self.update()
 
     def temp(self, new_data: dict):
         """ """
@@ -155,7 +166,7 @@ class Start(QtWidgets.QMainWindow):
 
 class Modal(QtWidgets.QDialog):
 
-    modal_closed = QtCore.pyqtSignal(dict)
+    modal_closed = QtCore.pyqtSignal(Node)
 
     def __init__(self, dataset: dict):
         super(Modal, self).__init__()
@@ -163,19 +174,46 @@ class Modal(QtWidgets.QDialog):
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
         self.setWindowFlag(QtCore.Qt.WindowStaysOnTopHint)
+        self.ui.save_btn.clicked.connect(self.save)
         self.dataset = dataset
         self.fill_data(dataset)
-
 
     def fill_data(self, dataset: dict):
         """ """
         nodes_list = dataset.get('nodes_list')
 
         for node in nodes_list:
-            if node.get('node_id') == node.get('node_id')
-                our_node = node
+            if node.node_id == dataset.get('node_id'):
+                self.our_node = node
 
-        self.ui.p_le.setText(our_node.p)
+        self.ui.p_le.setText(str(self.our_node.p))
+        if self.our_node.input_node:
+            self.ui.input_chb.setChecked(True)
+        if self.our_node.output_node:
+            self.ui.output_chb.setChecked(True)
+
+    def save(self):
+        """ """
+
+        p = self.ui.p_le.text()
+        rel = self.ui.lineEdit.text()
+        input  = self.ui.input_chb.checkState()
+        output = self.ui.output_chb.checkState()
+
+        self.our_node.p = float(self.ui.p_le.text())
+        if rel:
+            self.our_node.next_nodes = list(map(lambda x: int(x), rel.split(', ')))
+        else:
+            self.our_node.next_nodes = []
+        self.our_node.input_node = input
+        self.our_node.output_node = output
+
+        self.close()
+
+    def closeEvent(self, a0: QtGui.QCloseEvent):
+        """ event after closing of window """
+
+        self.modal_closed.emit(self.our_node)
 
 
 app = QtWidgets.QApplication([])

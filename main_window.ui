@@ -89,20 +89,6 @@
       <item>
        <widget class="QLineEdit" name="lineEdit"/>
       </item>
-      <item>
-       <widget class="QPushButton" name="min_routes">
-        <property name="text">
-         <string>Минимальные пути</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="true_table">
-        <property name="text">
-         <string>Табица истинности</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </widget>
@@ -153,13 +139,6 @@
       </item>
       <item>
        <widget class="QLineEdit" name="lineEdit_3"/>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="text">
-         <string>График</string>
-        </property>
-       </widget>
       </item>
      </layout>
     </widget>
