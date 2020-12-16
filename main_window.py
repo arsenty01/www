@@ -107,7 +107,6 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        self.liner = QtGui.QPainter()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
